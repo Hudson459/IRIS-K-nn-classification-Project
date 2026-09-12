@@ -11,6 +11,7 @@ import os
 
 """
 The hardcoded values in this script are:
+
 number_of_training_rows(line 27)
 number_of_testing_rows(line 28)
 k -- Denoting the range from 0 - k neighbors that you want to run calculations for (line 41)
@@ -27,7 +28,7 @@ data_path = os.path.join(current_dir, "IRIS.csv")
 train = pd.read_csv(data_path)
 train.info()
 
-number_training_rows = 100
+number_training_rows = 120
 number_testing_rows = 150 - number_training_rows - 2
 
 
@@ -39,11 +40,14 @@ data_full = train.to_numpy()
 x = list()
 y = list()
 
-for k in range(1, 100):
+#We will gather data by repeating our predictions for every value of k considered neighbors
+for k in range(1, 120):
 
+    #Creating a list to collect the different correct prediction percentages for each k value
     repeated_percentage = list()
 
-    for repeat in range(0, 30):
+    #To get a better percentage value, we will predict multiple times with each k value, then take the average correct classification percentage
+    for repeat in range(0, 100):
 
         #The data is organized by label, so we will shuffle it by row before hand
         np.random.shuffle(data_full)
@@ -120,18 +124,22 @@ for k in range(1, 100):
                 total_guesses += 1
             else:
                 print("SOMETHING IS WRONG")
-            
-        percentage = total_correct/total_guesses
-        percentage_rounded = np.round(total_correct/total_guesses, 4)*100
 
+        #Total correct classification for this given run
+        percentage = total_correct/total_guesses
+
+        #We add this to the list to average at the end of the runs for this k value
         repeated_percentage.append(percentage)
 
+    #After all the runs for a given k value are completed, we average them for a final percentage to be considered
     total_average = np.average(repeated_percentage)
+
 
     print("The total average percentage of correct classifications for ", k, " nearest neighbors is ", np.round(total_average, 4)*100, "%")
     y.append(total_average)
     x.append(k)
 
+#The plot created shows the total accuracy of the model based on the number of neighbors considered
 plt.plot(x, y)
 plt.xlabel("Number of nearest neighbors considered")
 plt.ylabel("Percentage of correct classifications")
