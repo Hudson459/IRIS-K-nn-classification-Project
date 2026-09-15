@@ -47,7 +47,7 @@ for k in range(1, 120):
     repeated_percentage = list()
 
     #To get a better percentage value, we will predict multiple times with each k value, then take the average correct classification percentage
-    for repeat in range(0, 100):
+    for repeat in range(0, 10):
 
         #The data is organized by label, so we will shuffle it by row before hand
         np.random.shuffle(data_full)
